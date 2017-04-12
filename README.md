@@ -1,7 +1,7 @@
 # dict
 ## 0_baikeCrawl.R
 针对http://baike.baidu.com/wikitag/taglist?tagId=75953 页面的爬虫脚本
-```r
+```shell
 Rscript 0_baikeCrawl.R --n_urls 25 --n_scroll_down 1 --max_sleep_time 0.2 --baike_all_path data/baike_all.rda --baike_para_path data/baike_para.txt --pjs_path phantomjs-2.1.1-windows/bin/phantomjs.exe
 ```
 * `n_urls`:需要抓取的疾病条目数
@@ -13,7 +13,7 @@ Rscript 0_baikeCrawl.R --n_urls 25 --n_scroll_down 1 --max_sleep_time 0.2 --baik
 
 ## 1_dicCreatePy.py
 新词发现算法
-```r
+```shell
 python 1_dicCreatePy.py -i data/para.txt -o data/python_dict.utf8 -s data/stop_words.utf8 --term_max_len 5 --thr_p 0 --thr_f 0 --thr_freq 5 --thr_idf 5 --in_encode utf8
 ```
 * `-i`:用于新词发现的语料
@@ -28,7 +28,7 @@ python 1_dicCreatePy.py -i data/para.txt -o data/python_dict.utf8 -s data/stop_w
 
 ## 2_segment.R
 合并用户自定义词典和细胞词库，并进行分词，如果提供了人工标注好的分词文件，可以计算准确率和召回率
-```r
+```shell
 Rscript 2_segment.R --user_dict dict/user_dict_complaint_all.utf8 --scels_path dict/ICD-10_1.scel, dict/ICD10.scel --mix_dict dict/user_dict_StatAndScel.utf8 --stopwords_path data/complaint_all.txt --labels_path data/complaint_all_label.utf8 --out_path data/segment.txt
 ```
 * `--user_dict`:用户自定义词典（通过新词发现算法创建的词典）
@@ -41,7 +41,7 @@ Rscript 2_segment.R --user_dict dict/user_dict_complaint_all.utf8 --scels_path d
 
 ## 3_word2vecPy.py
 创建词向量
-```r
+```shell
 python 3_word2vecPy.py -i data/segment.txt -o data/word2vec.model
 ```
 * `-i`:经过分词后的语料文件，词之间空格隔开
@@ -49,7 +49,7 @@ python 3_word2vecPy.py -i data/segment.txt -o data/word2vec.model
 
 ## 4_cnn.py
 进行卷积神经网络训练
-```r
+```shell
 python 4_cnn.py -t data/segment.txt -l data/labels.txt -v data/word2vec.model -m data/model.json -w data/model.h5
 ```
 * `-t`:用于训练的语料，已经经过分词，词之间用空格隔开
